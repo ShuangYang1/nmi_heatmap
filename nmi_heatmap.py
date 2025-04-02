@@ -107,7 +107,7 @@ def plot_heatmap(heatmap_data, softwares, output_path):
     ax = plt.gca()
     
     # 绘制热图
-    im = plt.imshow(heatmap_data, cmap='bwr', vmin=0, vmax=1)
+    im = plt.imshow(heatmap_data, cmap='coolwarm', vmin=0, vmax=1)
     
     # 添加颜色条
     cbar = plt.colorbar(im, fraction=0.046, pad=0.04)
@@ -168,6 +168,9 @@ def calculate_and_plot_nmi_heatmap(softwares, data_dict, output_path):
             heatmap_data[i,j] = combined_nmi[pair]
             heatmap_data[j,i] = combined_nmi[pair]  # 对称矩阵
     
+    # 设置对角线值为1（或其他你想要的值）
+    np.fill_diagonal(heatmap_data, 1)  # 这里将对角线设为1
+    
     # 绘制热图
     plot_heatmap(heatmap_data, softwares, output_path)
     
@@ -192,7 +195,7 @@ if __name__ == "__main__":
         'pfs_send': all_pfs_send,
         'power': all_power
     }
-    print(data_dict)
+    
     # 调用函数计算并绘制热图
     output_path = './software_nmi_heatmap.png'
     metrics, combined_nmi = calculate_and_plot_nmi_heatmap(softwares, data_dict, output_path)
